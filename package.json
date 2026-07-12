@@ -1,0 +1,33 @@
+{
+  "name": "grimreaper",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test packages/shared/src/*.test.js worker/src/*.test.js src/lib/*.test.js && PYTHONPATH=services/runner/src python3 -m unittest discover services/runner/tests",
+    "test:shared": "node --test packages/shared/src/*.test.js",
+    "test:worker": "node --test worker/src/*.test.js",
+    "test:runner": "PYTHONPATH=services/runner/src python3 -m unittest discover services/runner/tests",
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit --project tsconfig.app.json",
+    "preview": "vite preview --host 0.0.0.0",
+    "convex:dev": "convex dev",
+    "runner:dev": "python3 services/runner/src/grimreaper_runner/main.py --once"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "convex": "^1.25.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "vite": "^7.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.8.0",
+    "wrangler": "^4.0.0"
+  }
+}

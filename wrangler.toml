@@ -1,0 +1,10 @@
+name = "grimreaper-edge"
+main = "worker/src/index.ts"
+compatibility_date = "2026-07-12"
+
+[vars]
+SCANS_ENABLED = "true"
+ALLOWLIST_ONLY = "false"
+
+[observability]
+enabled = true

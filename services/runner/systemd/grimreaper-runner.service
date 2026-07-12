@@ -1,0 +1,17 @@
+[Unit]
+Description=GrimReaper Hermes Runner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/grimreaper
+EnvironmentFile=/etc/grimreaper/runner.env
+Environment=PYTHONPATH=/opt/grimreaper/services/runner/src
+ExecStart=/opt/grimreaper/.venv/bin/python -m grimreaper_runner.main
+Restart=always
+RestartSec=5
+User=grimreaper
+
+[Install]
+WantedBy=multi-user.target

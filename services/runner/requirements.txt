@@ -1,0 +1,7 @@
+convex>=0.7.0
+openai>=1.90.0
+elevenlabs>=2.0.0
+requests>=2.32.0
+
+# Install Hermes on the VM during deployment:
+# pip install "git+https://github.com/NousResearch/hermes-agent.git"
