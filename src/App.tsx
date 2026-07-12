@@ -22,7 +22,7 @@ import {
   subscribeToRun,
 } from "./lib/grimreaperClient";
 import type { ScanBundle, ScanMode, ScanTier, SubmitScanInput } from "./lib/types";
-import { progressForStatus, resultDisplay, statusLabel } from "./lib/viewModel.js";
+import { progressForStatus, resultDisplay, statusLabel, targetLabel } from "./lib/viewModel.js";
 
 const modes: Array<{ value: ScanMode; label: string }> = [
   { value: "landing", label: "Landing" },
@@ -283,7 +283,7 @@ function ProgressPanel({ bundle }: { bundle: ScanBundle | null }) {
       <div className="panel-heading">
         <div>
           <p className="eyebrow">Active scan</p>
-          <h2>{bundle?.app?.title ?? "No active target"}</h2>
+          <h2>{targetLabel(bundle?.app)}</h2>
         </div>
         <span className={`state-chip ${run?.status ?? "idle"}`}>{run ? statusLabel(run.status) : "Idle"}</span>
       </div>

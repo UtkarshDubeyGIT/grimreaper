@@ -50,18 +50,21 @@ class ScanOutcome:
     fixSuggestions: List[str]
 
     def to_convex(self) -> Dict[str, object]:
-        return {
+        payload = {
             "result": self.result,
             "score": self.score,
             "severity": self.severity,
             "survivedUsers": self.survivedUsers,
             "maxUsers": self.maxUsers,
-            "causeOfDeath": self.causeOfDeath,
-            "fatalRoute": self.fatalRoute,
             "verdictText": self.verdictText,
             "roastText": self.roastText,
             "fixSuggestions": self.fixSuggestions,
         }
+        if self.causeOfDeath is not None:
+            payload["causeOfDeath"] = self.causeOfDeath
+        if self.fatalRoute is not None:
+            payload["fatalRoute"] = self.fatalRoute
+        return payload
 
 
 def run_scan(job: Dict[str, object], config: RunnerConfig) -> ScanOutcome:

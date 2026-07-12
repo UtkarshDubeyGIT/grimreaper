@@ -33,6 +33,21 @@ export function resultDisplay(result) {
   };
 }
 
+export function targetLabel(app) {
+  if (!app) {
+    return "No active target";
+  }
+  if (app.title?.trim()) {
+    return app.title.trim();
+  }
+
+  try {
+    return new URL(app.normalizedUrl || app.url).hostname;
+  } catch {
+    return app.normalizedUrl || app.url || "Unknown target";
+  }
+}
+
 export function statusLabel(status) {
   switch (status) {
     case "queued":

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { progressForStatus, resultDisplay } from "./viewModel.js";
+import { progressForStatus, resultDisplay, targetLabel } from "./viewModel.js";
 
 describe("progressForStatus", () => {
   it("maps scan statuses to stable progress values", () => {
@@ -29,5 +29,17 @@ describe("resultDisplay", () => {
       badge: "Survived the haunt",
       accent: "safe",
     });
+  });
+});
+
+describe("targetLabel", () => {
+  it("uses the URL hostname when Convex has no optional app title", () => {
+    assert.equal(
+      targetLabel({
+        url: "https://quickcart.example/checkout",
+        normalizedUrl: "https://quickcart.example/checkout",
+      }),
+      "quickcart.example",
+    );
   });
 });
