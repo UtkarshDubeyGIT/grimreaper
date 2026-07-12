@@ -16,6 +16,7 @@ import {
 import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
 import { normalizeSubmittedUrl } from "../packages/shared/src/contracts.js";
 import { advanceDemoRun, demoLeaderboard, makeDemoRun } from "./lib/demoData";
+import { brandAssets } from "./lib/brandAssets.js";
 import {
   createRealtimeClient,
   submitScan,
@@ -201,11 +202,11 @@ export default function App() {
       <header className="topbar">
         <div className="brand-lockup">
           <div className="brand-mark" aria-hidden="true">
-            <Skull size={24} />
+            <img src={brandAssets.icon192} alt="" />
           </div>
           <div>
             <p className="eyebrow">GrimReaper</p>
-            <h1>AI browser stress test console</h1>
+            <h1>AI QA that kills weak apps.</h1>
           </div>
         </div>
         <div className="system-strip" aria-label="System status">
@@ -218,6 +219,14 @@ export default function App() {
       <section className="workspace-grid">
         <div className="scan-console">
           <form className="submit-surface" onSubmit={handleSubmit}>
+            <div className="form-intro">
+              <div>
+                <p className="eyebrow">New execution</p>
+                <h2>Can your app survive?</h2>
+              </div>
+              <img src={brandAssets.wordmark} alt="GrimReaper" />
+            </div>
+
             <div className="field-row">
               <label htmlFor="target-url">Target URL</label>
               <div className="url-input-wrap">
@@ -292,7 +301,7 @@ function PublicResultPage({ bundle, onBack }: { bundle: ScanBundle | null; onBac
       <header className="report-topbar">
         <div className="brand-lockup">
           <div className="brand-mark" aria-hidden="true">
-            <Skull size={24} />
+            <img src={brandAssets.icon192} alt="" />
           </div>
           <div>
             <p className="eyebrow">GrimReaper</p>
@@ -324,6 +333,11 @@ function PublicResultPage({ bundle, onBack }: { bundle: ScanBundle | null; onBac
               </a>
               <p>{report.verdict}</p>
             </div>
+            <img
+              className="report-art"
+              src={report.result === "survived" ? brandAssets.survivalBadge : brandAssets.deathCertificate}
+              alt=""
+            />
             <div className="report-score" aria-label={`Score ${report.score}`}>
               <span>Score</span>
               <strong>{report.score}</strong>
@@ -451,9 +465,11 @@ function VerdictPanel({
       </div>
 
       <div className="certificate-preview">
-        <div className="seal" aria-hidden="true">
-          {run?.result === "survived" ? <BadgeCheck size={44} /> : <Skull size={44} />}
-        </div>
+        <img
+          className="certificate-art"
+          src={run?.result === "survived" ? brandAssets.survivalBadge : brandAssets.deathCertificate}
+          alt=""
+        />
         <div>
           <p className="target-host">{bundle?.app?.title ?? "Awaiting result"}</p>
           <p className="verdict-copy">
