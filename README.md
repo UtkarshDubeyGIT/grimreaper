@@ -1,3 +1,5 @@
+<img width="1536" height="720" alt="image" src="https://github.com/user-attachments/assets/46d10dc1-af99-4bed-bd3d-eb096b75ffd6" />
+
 # GrimReaper
 
 GrimReaper stress-tests submitted apps with AI-driven browser personas, stores realtime state in Convex, serves the public UI through Cloudflare, and runs expensive browser/Hermes work on a DigitalOcean VM.
