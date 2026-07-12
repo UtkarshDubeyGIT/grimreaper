@@ -5,6 +5,7 @@ import {
   leaderboardVerdicts,
   progressForStatus,
   resultDisplay,
+  scanFormDefaults,
   targetLabel,
 } from "./viewModel.js";
 
@@ -55,5 +56,14 @@ describe("leaderboardVerdicts", () => {
     const failed = { run: { status: "failed" } };
 
     assert.deepEqual(leaderboardVerdicts([failed, completed]), [completed]);
+  });
+});
+
+describe("scanFormDefaults", () => {
+  it("starts empty and uses example.com only as placeholder text", () => {
+    assert.deepEqual(scanFormDefaults(), {
+      url: "",
+      placeholder: "https://example.com",
+    });
   });
 });

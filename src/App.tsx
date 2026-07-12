@@ -26,6 +26,7 @@ import {
   leaderboardVerdicts,
   progressForStatus,
   resultDisplay,
+  scanFormDefaults,
   statusLabel,
   targetLabel,
 } from "./lib/viewModel.js";
@@ -42,13 +43,15 @@ const tiers: Array<{ value: ScanTier; label: string; meta: string }> = [
   { value: "deep", label: "Deep", meta: "25 personas" },
 ];
 
+const formDefaults = scanFormDefaults();
+
 export default function App() {
   const convexUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
   const edgeBase = import.meta.env.VITE_EDGE_API_BASE as string | undefined;
   const liveMode = Boolean(convexUrl || edgeBase);
   const client = useMemo(() => createRealtimeClient(convexUrl), [convexUrl]);
 
-  const [url, setUrl] = useState("https://example.com/signup");
+  const [url, setUrl] = useState(formDefaults.url);
   const [mode, setMode] = useState<ScanMode>("signup");
   const [tier, setTier] = useState<ScanTier>("free");
   const [activeRun, setActiveRun] = useState<ScanBundle | null>(null);
@@ -210,7 +213,7 @@ export default function App() {
                   id="target-url"
                   value={url}
                   onChange={(event) => setUrl(event.target.value)}
-                  placeholder="https://your-app.com"
+                  placeholder={formDefaults.placeholder}
                   autoComplete="url"
                 />
               </div>

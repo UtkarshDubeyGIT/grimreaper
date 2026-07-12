@@ -57,6 +57,13 @@ export function leaderboardVerdicts(rows) {
   );
 }
 
+export function scanFormDefaults() {
+  return {
+    url: "",
+    placeholder: "https://example.com",
+  };
+}
+
 export function statusLabel(status) {
   switch (status) {
     case "queued":
