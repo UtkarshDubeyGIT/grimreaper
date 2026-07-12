@@ -11,6 +11,7 @@ const scanMode = v.union(
 const scanTier = v.union(v.literal("free"), v.literal("deep"));
 
 const scanStatus = v.union(
+  v.literal("awaiting_payment"),
   v.literal("queued"),
   v.literal("claiming"),
   v.literal("running"),
@@ -68,6 +69,7 @@ export default defineSchema({
     completedAt: v.optional(v.number()),
   })
     .index("by_status_createdAt", ["status", "createdAt"])
+    .index("by_status_claimExpiresAt", ["status", "claimExpiresAt"])
     .index("by_publicSlug", ["publicSlug"])
     .index("by_appId_createdAt", ["appId", "createdAt"])
     .index("by_result_score", ["result", "score"]),
@@ -99,19 +101,37 @@ export default defineSchema({
     roastText: v.string(),
     fixSuggestions: v.array(v.string()),
     audioUrl: v.optional(v.string()),
+    audioStatus: v.optional(
+      v.union(
+        v.literal("not_requested"),
+        v.literal("pending"),
+        v.literal("generating"),
+        v.literal("ready"),
+        v.literal("failed"),
+      ),
+    ),
+    audioAttempts: v.optional(v.number()),
+    audioRunnerId: v.optional(v.string()),
+    audioClaimExpiresAt: v.optional(v.number()),
+    audioError: v.optional(v.string()),
     shareImageUrl: v.optional(v.string()),
     createdAt: v.number(),
   })
     .index("by_publicSlug", ["publicSlug"])
-    .index("by_scanRunId", ["scanRunId"]),
+    .index("by_scanRunId", ["scanRunId"])
+    .index("by_audioStatus_createdAt", ["audioStatus", "createdAt"])
+    .index("by_audioStatus_claimExpiresAt", ["audioStatus", "audioClaimExpiresAt"]),
 
   payments: defineTable({
     userId: v.optional(v.id("users")),
     scanRunId: v.optional(v.id("scanRuns")),
     provider: v.literal("dodo"),
     providerSessionId: v.string(),
+    providerPaymentId: v.optional(v.string()),
+    productId: v.optional(v.string()),
     status: v.union(
       v.literal("created"),
+      v.literal("processing"),
       v.literal("paid"),
       v.literal("failed"),
       v.literal("refunded"),
@@ -123,5 +143,17 @@ export default defineSchema({
     updatedAt: v.number(),
   })
     .index("by_providerSessionId", ["providerSessionId"])
+    .index("by_providerPaymentId", ["providerPaymentId"])
     .index("by_scanRunId", ["scanRunId"]),
+
+  paymentEvents: defineTable({
+    provider: v.literal("dodo"),
+    providerEventId: v.string(),
+    providerSessionId: v.optional(v.string()),
+    providerPaymentId: v.optional(v.string()),
+    eventType: v.string(),
+    paymentId: v.optional(v.id("payments")),
+    scanRunId: v.optional(v.id("scanRuns")),
+    createdAt: v.number(),
+  }).index("by_providerEventId", ["providerEventId"]),
 });

@@ -362,8 +362,12 @@ export const getRun = query({
       .query("personaRuns")
       .withIndex("by_scanRunId", (q) => q.eq("scanRunId", args.scanRunId))
       .collect();
+    const certificate = await ctx.db
+      .query("deathCertificates")
+      .withIndex("by_scanRunId", (q) => q.eq("scanRunId", args.scanRunId))
+      .first();
 
-    return { run, app, personas };
+    return { run, app, certificate, personas };
   },
 });
 

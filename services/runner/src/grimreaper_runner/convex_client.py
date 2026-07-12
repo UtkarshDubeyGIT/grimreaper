@@ -1,3 +1,5 @@
+import json
+import urllib.request
 from typing import Any, Dict, Optional
 
 
@@ -62,6 +64,30 @@ class ConvexAdapter:
                 "runnerId": runner_id,
                 "runnerToken": runner_token,
                 "result": result,
+            },
+        )
+
+    def upload_audio(
+        self, runner_token: Optional[str], audio_bytes: bytes, content_type: str
+    ) -> str:
+        upload_url = self._client.mutation(
+            "artifacts:createAudioUploadUrl",
+            {"runnerToken": runner_token},
+        )
+        request = urllib.request.Request(
+            upload_url,
+            data=audio_bytes,
+            method="POST",
+            headers={"content-type": content_type},
+        )
+        with urllib.request.urlopen(request, timeout=30) as response:
+            upload = json.loads(response.read().decode("utf-8"))
+
+        return self._client.mutation(
+            "artifacts:resolveAudioUrl",
+            {
+                "runnerToken": runner_token,
+                "storageId": upload["storageId"],
             },
         )
 

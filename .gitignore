@@ -10,6 +10,7 @@ dist/
 .env.*
 !.env.example
 services/runner/runner.env
+services/runner/runner.env.bak
 coverage/
 __pycache__/
 *.pyc

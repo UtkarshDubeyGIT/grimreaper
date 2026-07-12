@@ -6,6 +6,7 @@ import traceback
 from .config import RunnerConfig
 from .convex_client import ConvexAdapter
 from .scanner import run_scan, sleep_with_jitter
+from .voice import generate_audio_artifact
 
 
 def main() -> int:
@@ -59,11 +60,18 @@ def process_job(convex: ConvexAdapter, config: RunnerConfig, job: dict) -> None:
             config.convex_runner_token,
             "Finalizing verdict",
         )
+        result = outcome.to_convex()
+        try:
+            audio_url = generate_audio_artifact(convex, config, outcome.roastText)
+            if audio_url:
+                result["audioUrl"] = audio_url
+        except Exception as exc:  # Voice is optional and must not suppress the verdict.
+            print("Voice generation skipped for %s: %s" % (scan_run_id, str(exc)[:220]))
         convex.complete_scan(
             scan_run_id,
             config.runner_id,
             config.convex_runner_token,
-            outcome.to_convex(),
+            result,
         )
         print("Completed scan %s" % scan_run_id)
     except Exception as exc:  # noqa: BLE001 - runner must fail scans safely.

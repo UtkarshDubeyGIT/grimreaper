@@ -331,7 +331,17 @@ function PublicResultPage({ bundle, onBack }: { bundle: ScanBundle | null; onBac
                 {report.target}
                 <ExternalLink size={16} />
               </a>
-              <p>{report.verdict}</p>
+              <p className="report-verdict">{report.verdict}</p>
+              {bundle?.certificate?.audioUrl ? (
+                <button
+                  type="button"
+                  className="report-audio"
+                  onClick={() => new Audio(bundle.certificate?.audioUrl).play()}
+                >
+                  <Volume2 size={17} />
+                  Play voice roast
+                </button>
+              ) : null}
             </div>
             <img
               className="report-art"
@@ -503,7 +513,13 @@ function VerdictPanel({
           <RefreshCw size={16} />
           Open result
         </button>
-        <button type="button" className="icon-action" disabled={!certificate?.audioUrl} aria-label="Play audio roast">
+        <button
+          type="button"
+          className="icon-action"
+          disabled={!certificate?.audioUrl}
+          aria-label="Play audio roast"
+          onClick={() => certificate?.audioUrl && new Audio(certificate.audioUrl).play()}
+        >
           <Volume2 size={17} />
         </button>
       </div>

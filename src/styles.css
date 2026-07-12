@@ -752,12 +752,26 @@ h2 {
   overflow-wrap: anywhere;
 }
 
-.report-hero-copy > p:last-child {
+.report-verdict {
   max-width: 720px;
   margin: 28px 0 0;
   color: #d8d0c1;
   font-size: 1.02rem;
   line-height: 1.65;
+}
+
+.report-audio {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  margin-top: 18px;
+  padding: 0 14px;
+  color: var(--bone);
+  background: #0f0f13;
+  border: 1px solid rgba(242, 237, 224, 0.28);
+  border-radius: 8px;
+  font-weight: 900;
 }
 
 .report-art {

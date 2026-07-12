@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as artifacts from "../artifacts.js";
 import type * as http from "../http.js";
 import type * as payments from "../payments.js";
 import type * as scans from "../scans.js";
@@ -19,6 +20,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  artifacts: typeof artifacts;
   http: typeof http;
   payments: typeof payments;
   scans: typeof scans;
