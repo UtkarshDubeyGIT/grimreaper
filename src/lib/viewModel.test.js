@@ -1,7 +1,12 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
-import { progressForStatus, resultDisplay, targetLabel } from "./viewModel.js";
+import {
+  leaderboardVerdicts,
+  progressForStatus,
+  resultDisplay,
+  targetLabel,
+} from "./viewModel.js";
 
 describe("progressForStatus", () => {
   it("maps scan statuses to stable progress values", () => {
@@ -41,5 +46,14 @@ describe("targetLabel", () => {
       }),
       "quickcart.example",
     );
+  });
+});
+
+describe("leaderboardVerdicts", () => {
+  it("omits failed and unscored runs from recent verdicts", () => {
+    const completed = { run: { status: "completed", result: "survived", score: 88 } };
+    const failed = { run: { status: "failed" } };
+
+    assert.deepEqual(leaderboardVerdicts([failed, completed]), [completed]);
   });
 });

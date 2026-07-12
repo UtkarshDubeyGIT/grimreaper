@@ -22,7 +22,13 @@ import {
   subscribeToRun,
 } from "./lib/grimreaperClient";
 import type { ScanBundle, ScanMode, ScanTier, SubmitScanInput } from "./lib/types";
-import { progressForStatus, resultDisplay, statusLabel, targetLabel } from "./lib/viewModel.js";
+import {
+  leaderboardVerdicts,
+  progressForStatus,
+  resultDisplay,
+  statusLabel,
+  targetLabel,
+} from "./lib/viewModel.js";
 
 const modes: Array<{ value: ScanMode; label: string }> = [
   { value: "landing", label: "Landing" },
@@ -64,9 +70,7 @@ export default function App() {
 
   useEffect(() => {
     return subscribeToLeaderboard(client, (rows) => {
-      if (rows.length > 0) {
-        setLeaderboard(rows);
-      }
+      setLeaderboard(leaderboardVerdicts(rows));
     });
   }, [client]);
 

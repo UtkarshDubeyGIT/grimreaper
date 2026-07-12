@@ -48,6 +48,15 @@ export function targetLabel(app) {
   }
 }
 
+export function leaderboardVerdicts(rows) {
+  return rows.filter(
+    ({ run }) =>
+      run?.status === "completed" &&
+      (run.result === "dead" || run.result === "survived") &&
+      Number.isFinite(run.score),
+  );
+}
+
 export function statusLabel(status) {
   switch (status) {
     case "queued":
