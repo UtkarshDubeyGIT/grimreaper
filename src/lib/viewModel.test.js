@@ -4,6 +4,7 @@ import { describe, it } from "node:test";
 import {
   leaderboardVerdicts,
   progressForStatus,
+  publicReportView,
   resultDisplay,
   scanFormDefaults,
   targetLabel,
@@ -64,6 +65,51 @@ describe("scanFormDefaults", () => {
     assert.deepEqual(scanFormDefaults(), {
       url: "",
       placeholder: "https://example.com",
+    });
+  });
+});
+
+describe("publicReportView", () => {
+  it("builds a complete shareable report from a finished scan", () => {
+    const view = publicReportView({
+      run: {
+        status: "completed",
+        result: "survived",
+        score: 88,
+        survivedUsers: 5,
+        maxUsers: 5,
+        mode: "signup",
+        tier: "free",
+        severity: "minor",
+      },
+      app: {
+        url: "https://quickcart.example/signup",
+        normalizedUrl: "https://quickcart.example/signup",
+      },
+      certificate: {
+        verdictText: "The app survived.",
+        roastText: "The reaper left empty-handed.",
+        fixSuggestions: ["Test the authenticated path."],
+      },
+      personas: [],
+    });
+
+    assert.deepEqual(view, {
+      result: "survived",
+      title: "Survival report",
+      target: "quickcart.example",
+      targetUrl: "https://quickcart.example/signup",
+      score: "88/100",
+      survivors: "5/5",
+      mode: "SIGNUP",
+      tier: "FREE",
+      severity: "MINOR",
+      verdict: "The app survived.",
+      roast: "The reaper left empty-handed.",
+      cause: "No fatal failure recorded.",
+      fatalRoute: "None",
+      suggestions: ["Test the authenticated path."],
+      personas: [],
     });
   });
 });

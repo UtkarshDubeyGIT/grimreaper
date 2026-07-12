@@ -382,8 +382,12 @@ export const getPublicResult = query({
       .query("deathCertificates")
       .withIndex("by_publicSlug", (q) => q.eq("publicSlug", args.publicSlug))
       .first();
+    const personas = await ctx.db
+      .query("personaRuns")
+      .withIndex("by_scanRunId", (q) => q.eq("scanRunId", run._id))
+      .collect();
 
-    return { run, app, certificate };
+    return { run, app, certificate, personas };
   },
 });
 

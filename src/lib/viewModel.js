@@ -64,6 +64,32 @@ export function scanFormDefaults() {
   };
 }
 
+export function publicReportView(bundle) {
+  const run = bundle?.run;
+  const certificate = bundle?.certificate;
+  if (!run?.result || !bundle?.app || !certificate) {
+    return null;
+  }
+
+  return {
+    result: run.result,
+    title: run.result === "dead" ? "Death certificate" : "Survival report",
+    target: targetLabel(bundle.app),
+    targetUrl: bundle.app.url,
+    score: `${run.score ?? 0}/100`,
+    survivors: `${run.survivedUsers}/${run.maxUsers}`,
+    mode: String(run.mode).toUpperCase(),
+    tier: String(run.tier).toUpperCase(),
+    severity: String(run.severity ?? "unrated").toUpperCase(),
+    verdict: certificate.verdictText,
+    roast: certificate.roastText,
+    cause: run.causeOfDeath ?? "No fatal failure recorded.",
+    fatalRoute: run.fatalRoute ?? "None",
+    suggestions: certificate.fixSuggestions,
+    personas: bundle.personas ?? [],
+  };
+}
+
 export function statusLabel(status) {
   switch (status) {
     case "queued":

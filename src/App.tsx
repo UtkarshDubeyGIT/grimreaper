@@ -1,7 +1,9 @@
 import {
   Activity,
+  ArrowLeft,
   ArrowRight,
   BadgeCheck,
+  ExternalLink,
   Flame,
   Link as LinkIcon,
   LoaderCircle,
@@ -21,10 +23,11 @@ import {
   subscribeToPublicResult,
   subscribeToRun,
 } from "./lib/grimreaperClient";
-import type { ScanBundle, ScanMode, ScanTier, SubmitScanInput } from "./lib/types";
+import type { PersonaRunRecord, ScanBundle, ScanMode, ScanTier, SubmitScanInput } from "./lib/types";
 import {
   leaderboardVerdicts,
   progressForStatus,
+  publicReportView,
   resultDisplay,
   scanFormDefaults,
   statusLabel,
@@ -177,11 +180,21 @@ export default function App() {
   function openResult(slug: string) {
     setSelectedSlug(slug);
     const bundle = activeRun?.run.publicSlug === slug ? activeRun : leaderboard.find((row) => row.run.publicSlug === slug);
-    setPublicResult(bundle ?? null);
+    setPublicResult(liveMode ? null : (bundle ?? null));
     window.history.pushState({}, "", `/r/${slug}`);
   }
 
+  function closeResult() {
+    setSelectedSlug(null);
+    setPublicResult(null);
+    window.history.pushState({}, "", "/");
+  }
+
   const visibleResult = publicResult ?? (activeRun?.run.status === "completed" ? activeRun : null);
+
+  if (selectedSlug) {
+    return <PublicResultPage bundle={publicResult} onBack={closeResult} />;
+  }
 
   return (
     <main className="app-shell">
@@ -267,6 +280,102 @@ export default function App() {
           <Leaderboard rows={leaderboard} onOpenResult={openResult} />
         </div>
       </section>
+    </main>
+  );
+}
+
+function PublicResultPage({ bundle, onBack }: { bundle: ScanBundle | null; onBack: () => void }) {
+  const report = publicReportView(bundle);
+
+  return (
+    <main className="public-report-shell">
+      <header className="report-topbar">
+        <div className="brand-lockup">
+          <div className="brand-mark" aria-hidden="true">
+            <Skull size={24} />
+          </div>
+          <div>
+            <p className="eyebrow">GrimReaper</p>
+            <strong>Public scan report</strong>
+          </div>
+        </div>
+        <button type="button" className="report-back" onClick={onBack}>
+          <ArrowLeft size={17} />
+          Back to scanner
+        </button>
+      </header>
+
+      {!report ? (
+        <section className="report-loading" aria-live="polite">
+          <LoaderCircle className="spin" size={28} />
+          <p className="eyebrow">Retrieving certificate</p>
+          <h1>Preparing the public report</h1>
+          <p>The verdict and collected evidence are loading from Convex.</p>
+        </section>
+      ) : (
+        <>
+          <section className={`report-hero ${report.result}`}>
+            <div className="report-hero-copy">
+              <p className="eyebrow">{report.result === "dead" ? "App declared dead" : "App survived"}</p>
+              <h1>{report.title}</h1>
+              <a href={report.targetUrl} target="_blank" rel="noreferrer">
+                {report.target}
+                <ExternalLink size={16} />
+              </a>
+              <p>{report.verdict}</p>
+            </div>
+            <div className="report-score" aria-label={`Score ${report.score}`}>
+              <span>Score</span>
+              <strong>{report.score}</strong>
+              <small>{report.severity}</small>
+            </div>
+          </section>
+
+          <section className="report-facts" aria-label="Report summary">
+            <Metric label="Survivors" value={report.survivors} />
+            <Metric label="Mode" value={report.mode} />
+            <Metric label="Tier" value={report.tier} />
+            <Metric label="Fatal route" value={report.fatalRoute} />
+          </section>
+
+          <section className="report-body">
+            <article className="report-findings">
+              <p className="eyebrow">Final verdict</p>
+              <h2>{report.cause}</h2>
+              <blockquote>{report.roast}</blockquote>
+            </article>
+            <aside className="report-fixes">
+              <p className="eyebrow">Recommended fixes</p>
+              <ol>
+                {report.suggestions.map((suggestion: string) => (
+                  <li key={suggestion}>{suggestion}</li>
+                ))}
+              </ol>
+            </aside>
+          </section>
+
+          <section className="report-evidence">
+            <div className="report-section-heading">
+              <div>
+                <p className="eyebrow">Persona evidence</p>
+                <h2>{report.personas.length} completed checks</h2>
+              </div>
+              <BadgeCheck size={24} aria-hidden="true" />
+            </div>
+            <div className="report-evidence-list">
+              {report.personas.map((persona: PersonaRunRecord) => (
+                <article key={persona.personaName}>
+                  <div>
+                    <strong>{persona.personaName}</strong>
+                    <p>{persona.summary ?? persona.task}</p>
+                  </div>
+                  <span className={`persona-status ${persona.status}`}>{persona.status}</span>
+                </article>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
     </main>
   );
 }

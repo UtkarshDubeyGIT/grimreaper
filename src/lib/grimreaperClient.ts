@@ -76,7 +76,7 @@ export function subscribeToPublicResult(
     onUpdate({
       run: result.run,
       app: result.app,
-      personas: [],
+      personas: result.personas ?? [],
       certificate: result.certificate,
     });
   });
