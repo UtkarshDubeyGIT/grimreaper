@@ -18,7 +18,7 @@ sudo chown -R grimreaper:grimreaper /opt/grimreaper
 
 Clone the repository into `/opt/grimreaper`, create a Python virtualenv, install `services/runner/requirements.txt`, then install Hermes from `NousResearch/hermes-agent`.
 
-Create `/etc/grimreaper/runner.env` from `.env.example` with real values:
+Create `/etc/grimreaper/runner.env` from `services/runner/runner.env.example` with real values. The complete environment reference is in `docs/environment-variables.md`:
 
 ```text
 CONVEX_URL=

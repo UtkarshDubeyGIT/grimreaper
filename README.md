@@ -19,7 +19,7 @@ npm run build
 npm run dev
 ```
 
-Without `VITE_CONVEX_URL`, the UI runs in demo mode. Set the values from `.env.example` to connect the real Worker and Convex deployment.
+Without `VITE_CONVEX_URL`, the UI runs in demo mode. Copy `.env.example` to `.env.local` to connect the real Worker and Convex deployment. See [Environment Variables](docs/environment-variables.md) for every file, value, and production location.
 
 ## Convex
 

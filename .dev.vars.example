@@ -1,0 +1,12 @@
+# Cloudflare Worker local configuration. Copy to .dev.vars.
+# In production, set these in the Cloudflare Worker dashboard or with Wrangler.
+
+# Required: public Convex deployment URL.
+CONVEX_URL=https://your-deployment.convex.cloud
+
+# Emergency kill switch for new scan submissions.
+SCANS_ENABLED=true
+
+# Set true during a restricted demo, then list comma-separated hostnames below.
+ALLOWLIST_ONLY=false
+ALLOWLIST_HOSTS=
